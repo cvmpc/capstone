@@ -1,0 +1,488 @@
+
+CREATE TABLE `address` (
+  `address_id` int(11) NOT NULL,
+  `sitio` varchar(45) NOT NULL,
+  `barangay` varchar(45) NOT NULL,
+  `city` varchar(45) NOT NULL,
+  `province` varchar(45) NOT NULL
+) ;
+
+
+CREATE TABLE `admin` (
+  `admin_id` int(11) NOT NULL,
+  `uc_id` int(11) NOT NULL,
+  `first_name` varchar(45) DEFAULT NULL,
+  `middle_name` varchar(45) NOT NULL,
+  `last_name` varchar(45) DEFAULT NULL,
+  `phone_number` varchar(45) DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT NULL,
+  `last_login` date DEFAULT NULL,
+  `about_me` varchar(255) NOT NULL
+) ;
+
+
+CREATE TABLE `chat` (
+  `chat_id` int(11) NOT NULL,
+  `message` varchar(255) DEFAULT NULL,
+  `sent_at` date DEFAULT NULL,
+  `is_read` tinyint(1) DEFAULT NULL,
+  `member_id` int(11) DEFAULT NULL,
+  `staff_id` int(11) DEFAULT NULL
+) ;
+
+
+CREATE TABLE `document` (
+  `document_id` int(11) NOT NULL,
+  `file_name` varchar(45) DEFAULT NULL,
+  `produce_date` date DEFAULT NULL,
+  `loan_id` int(11) DEFAULT NULL
+) ;
+
+
+CREATE TABLE `loan` (
+  `loan_id` int(11) NOT NULL,
+  `principal_amount` decimal(15,2) DEFAULT NULL,
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
+  `remaining_balance` decimal(15,2) DEFAULT NULL,
+  `status` enum('Active','Inactive','Closed','On Progress') DEFAULT NULL,
+  `application_id` int(11) DEFAULT NULL,
+  `release_date` varchar(45) DEFAULT NULL,
+  `loan_plan_id` int(11) DEFAULT NULL
+) ;
+
+
+CREATE TABLE `loan_application` (
+  `application_id` int(11) NOT NULL,
+  `amount_requested` decimal(15,2) DEFAULT NULL,
+  `purpose` varchar(255) DEFAULT NULL,
+  `application_date` date DEFAULT NULL,
+  `status` enum('Pending','Approved','Rejected','Active') DEFAULT NULL,
+  `review_notes` varchar(255) DEFAULT NULL,
+  `member_id` int(11) DEFAULT NULL
+) ;
+
+
+
+CREATE TABLE `loan_plan` (
+  `loan_plan_id` int(11) NOT NULL,
+  `interest_rate` decimal(5,2) DEFAULT NULL,
+  `penalty_rate` decimal(5,2) DEFAULT NULL,
+  `monthly_term` int(11) DEFAULT NULL,
+  `loan_type_id` int(11) DEFAULT NULL,
+  `status` enum('Active','Deactivated') NOT NULL
+) ;
+
+
+
+CREATE TABLE `loan_report` (
+  `loan_report_id` int(11) NOT NULL,
+  `report_date` date NOT NULL,
+  `loan_id` int(11) DEFAULT NULL
+) ;
+
+
+
+CREATE TABLE `loan_types` (
+  `loan_type_id` int(11) NOT NULL,
+  `type_name` varchar(45) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL
+) ;
+
+
+
+CREATE TABLE `member` (
+  `member_id` int(11) NOT NULL,
+  `uc_id` int(11) NOT NULL,
+  `first_name` varchar(45) DEFAULT NULL,
+  `middle_name` varchar(45) DEFAULT NULL,
+  `last_name` varchar(45) DEFAULT NULL,
+  `phone_number` varchar(45) DEFAULT NULL,
+  `date_of_birth` date DEFAULT NULL,
+  `registration_date` date DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT NULL,
+  `status` enum('Active','Inactive','Deactivated','Archived') NOT NULL,
+  `line_of_business` varchar(45) DEFAULT NULL,
+  `about_me` varchar(255) DEFAULT NULL
+) ;
+
+
+
+
+CREATE TABLE `notification` (
+  `notification_id` int(11) NOT NULL,
+  `message` varchar(255) DEFAULT NULL,
+  `created_at` date NOT NULL,
+  `is_read` tinyint(1) DEFAULT NULL,
+  `notification_type` enum('Payment','Loan Status','Reminder') DEFAULT NULL,
+  `member_id` int(11) DEFAULT NULL,
+  `staff_id` int(11) DEFAULT NULL
+) ;
+
+
+
+CREATE TABLE `payment` (
+  `payment_id` int(11) NOT NULL,
+  `amount` decimal(15,2) DEFAULT NULL,
+  `payment_date` date DEFAULT NULL,
+  `payment_method` enum('PayMaya','Gcash') DEFAULT NULL,
+  `status` enum('Successful','Failed','Pending') DEFAULT NULL,
+  `loan_id` int(11) DEFAULT NULL
+) ;
+
+
+
+CREATE TABLE `repayment_schedule` (
+  `schedule_id` int(11) NOT NULL,
+  `due_date` date NOT NULL,
+  `is_paid` tinyint(1) DEFAULT NULL,
+  `loan_id` int(11) DEFAULT NULL
+) ;
+
+
+
+CREATE TABLE `staff` (
+  `staff_id` int(11) NOT NULL,
+  `uc_id` int(11) NOT NULL,
+  `first_name` varchar(45) DEFAULT NULL,
+  `middle_name` varchar(45) DEFAULT NULL,
+  `last_name` varchar(45) DEFAULT NULL,
+  `phone_number` varchar(45) DEFAULT NULL,
+  `hire_date` date DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT NULL,
+  `status` enum('Active','Inactive','Deactivated','Archived') DEFAULT NULL,
+  `about_me` varchar(255) DEFAULT NULL,
+  `last_login` date DEFAULT NULL,
+  `date_of_birth` date DEFAULT NULL
+) ;
+
+
+
+
+--
+-- Table structure for table `uploaded_document`
+--
+
+CREATE TABLE `uploaded_document` (
+  `uploaded_document_id` int(11) NOT NULL,
+  `document_type` varchar(45) DEFAULT NULL,
+  `uploaded_date` varchar(45) DEFAULT NULL,
+  `member_member_id` int(11) DEFAULT NULL
+) ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_credentials`
+--
+
+CREATE TABLE `user_credentials` (
+  `uc_id` int(11) NOT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `role` varchar(45) DEFAULT NULL,
+  `address_id` int(11) DEFAULT NULL,
+  `us_id` int(11) DEFAULT NULL,
+  `email` varchar(45) NOT NULL,
+  `pp` varchar(255) NOT NULL DEFAULT 'default-pp.png'
+) ;
+
+
+
+--
+-- Table structure for table `user_socials`
+--
+
+CREATE TABLE `user_socials` (
+  `us_id` int(11) NOT NULL,
+  `facebook_link` varchar(45) DEFAULT NULL,
+  `twitter_link` varchar(45) DEFAULT NULL,
+  `instagram_link` varchar(45) DEFAULT NULL,
+  `linkedin_link` varchar(45) DEFAULT NULL
+) ;
+
+--
+-- Dumping data for table `user_socials`
+--
+
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `address`
+--
+ALTER TABLE `address`
+  ADD PRIMARY KEY (`address_id`);
+
+--
+-- Indexes for table `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`admin_id`),
+  ADD KEY `admin_ibfk_2` (`uc_id`);
+
+--
+-- Indexes for table `chat`
+--
+ALTER TABLE `chat`
+  ADD PRIMARY KEY (`chat_id`),
+  ADD KEY `member_id` (`member_id`),
+  ADD KEY `staff_id` (`staff_id`);
+
+--
+-- Indexes for table `document`
+--
+ALTER TABLE `document`
+  ADD PRIMARY KEY (`document_id`),
+  ADD KEY `loan_id` (`loan_id`);
+
+--
+-- Indexes for table `loan`
+--
+ALTER TABLE `loan`
+  ADD PRIMARY KEY (`loan_id`),
+  ADD KEY `application_id` (`application_id`),
+  ADD KEY `loan_plan_id` (`loan_plan_id`);
+
+--
+-- Indexes for table `loan_application`
+--
+ALTER TABLE `loan_application`
+  ADD PRIMARY KEY (`application_id`),
+  ADD KEY `member_id` (`member_id`);
+
+--
+-- Indexes for table `loan_plan`
+--
+ALTER TABLE `loan_plan`
+  ADD PRIMARY KEY (`loan_plan_id`),
+  ADD KEY `loan_type_id` (`loan_type_id`);
+
+--
+-- Indexes for table `loan_report`
+--
+ALTER TABLE `loan_report`
+  ADD PRIMARY KEY (`loan_report_id`),
+  ADD KEY `loan_id` (`loan_id`);
+
+--
+-- Indexes for table `loan_types`
+--
+ALTER TABLE `loan_types`
+  ADD PRIMARY KEY (`loan_type_id`);
+
+--
+-- Indexes for table `member`
+--
+ALTER TABLE `member`
+  ADD PRIMARY KEY (`member_id`),
+  ADD KEY `member_ibfk_2` (`uc_id`);
+
+--
+-- Indexes for table `notification`
+--
+ALTER TABLE `notification`
+  ADD PRIMARY KEY (`notification_id`),
+  ADD KEY `member_id` (`member_id`),
+  ADD KEY `staff_id` (`staff_id`);
+
+--
+-- Indexes for table `payment`
+--
+ALTER TABLE `payment`
+  ADD PRIMARY KEY (`payment_id`),
+  ADD KEY `loan_id` (`loan_id`);
+
+--
+-- Indexes for table `repayment_schedule`
+--
+ALTER TABLE `repayment_schedule`
+  ADD PRIMARY KEY (`schedule_id`),
+  ADD KEY `loan_id` (`loan_id`);
+
+--
+-- Indexes for table `staff`
+--
+ALTER TABLE `staff`
+  ADD PRIMARY KEY (`staff_id`),
+  ADD KEY `staff_ibfk_2` (`uc_id`);
+
+--
+-- Indexes for table `uploaded_document`
+--
+ALTER TABLE `uploaded_document`
+  ADD PRIMARY KEY (`uploaded_document_id`),
+  ADD KEY `member_member_id` (`member_member_id`);
+
+--
+-- Indexes for table `user_credentials`
+--
+ALTER TABLE `user_credentials`
+  ADD PRIMARY KEY (`uc_id`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD KEY `us_ibfk_2` (`address_id`),
+  ADD KEY `us_ibfk_3` (`us_id`);
+
+--
+-- Indexes for table `user_socials`
+--
+ALTER TABLE `user_socials`
+  ADD PRIMARY KEY (`us_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `address`
+--
+ALTER TABLE `address`
+  MODIFY `address_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT for table `admin`
+--
+ALTER TABLE `admin`
+  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `chat`
+--
+ALTER TABLE `chat`
+  MODIFY `chat_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `document`
+--
+ALTER TABLE `document`
+  MODIFY `document_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `loan`
+--
+ALTER TABLE `loan`
+  MODIFY `loan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `loan_application`
+--
+ALTER TABLE `loan_application`
+  MODIFY `application_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `loan_plan`
+--
+ALTER TABLE `loan_plan`
+  MODIFY `loan_plan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `loan_report`
+--
+ALTER TABLE `loan_report`
+  MODIFY `loan_report_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `loan_types`
+--
+ALTER TABLE `loan_types`
+  MODIFY `loan_type_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `member`
+--
+ALTER TABLE `member`
+  MODIFY `member_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+
+--
+-- AUTO_INCREMENT for table `notification`
+--
+ALTER TABLE `notification`
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT;
+
+
+ALTER TABLE `payment`
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT;
+
+
+ALTER TABLE `repayment_schedule`
+  MODIFY `schedule_id` int(11) NOT NULL AUTO_INCREMENT;
+
+
+ALTER TABLE `staff`
+  MODIFY `staff_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+
+ALTER TABLE `uploaded_document`
+  MODIFY `uploaded_document_id` int(11) NOT NULL AUTO_INCREMENT;
+
+
+ALTER TABLE `user_credentials`
+  MODIFY `uc_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+
+
+ALTER TABLE `user_socials`
+  MODIFY `us_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+
+ALTER TABLE `admin`
+  ADD CONSTRAINT `admin_ibfk_2` FOREIGN KEY (`uc_id`) REFERENCES `user_credentials` (`uc_id`);
+
+
+ALTER TABLE `chat`
+  ADD CONSTRAINT `chat_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_id`),
+  ADD CONSTRAINT `chat_ibfk_2` FOREIGN KEY (`staff_id`) REFERENCES `staff` (`staff_id`);
+
+
+ALTER TABLE `document`
+  ADD CONSTRAINT `document_ibfk_1` FOREIGN KEY (`loan_id`) REFERENCES `loan` (`loan_id`);
+
+
+ALTER TABLE `loan`
+  ADD CONSTRAINT `loan_ibfk_1` FOREIGN KEY (`application_id`) REFERENCES `loan_application` (`application_id`),
+  ADD CONSTRAINT `loan_ibfk_2` FOREIGN KEY (`loan_plan_id`) REFERENCES `loan_plan` (`loan_plan_id`);
+
+
+ALTER TABLE `loan_application`
+  ADD CONSTRAINT `loan_application_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_id`);
+
+
+ALTER TABLE `loan_plan`
+  ADD CONSTRAINT `loan_plan_ibfk_1` FOREIGN KEY (`loan_type_id`) REFERENCES `loan_types` (`loan_type_id`);
+
+
+ALTER TABLE `loan_report`
+  ADD CONSTRAINT `loan_report_ibfk_1` FOREIGN KEY (`loan_id`) REFERENCES `loan` (`loan_id`);
+
+
+ALTER TABLE `member`
+  ADD CONSTRAINT `member_ibfk_2` FOREIGN KEY (`uc_id`) REFERENCES `user_credentials` (`uc_id`);
+
+
+ALTER TABLE `notification`
+  ADD CONSTRAINT `notification_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_id`),
+  ADD CONSTRAINT `notification_ibfk_2` FOREIGN KEY (`staff_id`) REFERENCES `staff` (`staff_id`);
+
+
+ALTER TABLE `payment`
+  ADD CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`loan_id`) REFERENCES `loan` (`loan_id`);
+
+
+ALTER TABLE `repayment_schedule`
+  ADD CONSTRAINT `repayment_schedule_ibfk_1` FOREIGN KEY (`loan_id`) REFERENCES `loan` (`loan_id`);
+
+
+ALTER TABLE `staff`
+  ADD CONSTRAINT `staff_ibfk_2` FOREIGN KEY (`uc_id`) REFERENCES `user_credentials` (`uc_id`);
+
+
+ALTER TABLE `uploaded_document`
+  ADD CONSTRAINT `uploaded_document_ibfk_1` FOREIGN KEY (`member_member_id`) REFERENCES `member` (`member_id`);
+
+
+ALTER TABLE `user_credentials`
+  ADD CONSTRAINT `us_ibfk_2` FOREIGN KEY (`address_id`) REFERENCES `address` (`address_id`),
+  ADD CONSTRAINT `us_ibfk_3` FOREIGN KEY (`us_id`) REFERENCES `user_socials` (`us_id`);
+COMMIT;
+
+
